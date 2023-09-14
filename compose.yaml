@@ -1,168 +1,101 @@
 services:
-
-############## BOOT NODES ##############
-
-  fullnode-bcb-1:
-    image: "hyperledger/besu:23.7.2"
-    volumes:
-      - ./fullnode-bcb-1:.
-    environment:
-      P2P_PORT: 30303
-      BESU_IDENTITY: "fullnode-bcb-1"
-    entrypoint: ["./entrypoint_bootnode.sh"]
-
-  fullnode-bcb-2:
-    image: "hyperledger/besu:23.7.2"
-    volumes:
-      - ./fullnode-bcb-2:.
-    environment:
-      P2P_PORT: 30304
-      BESU_IDENTITY: "fullnode-bcb-2"
-    entrypoint: ["./entrypoint_bootnode.sh"]
-
-  fullnode-selic-1:
-    image: "hyperledger/besu:23.7.2"
-    volumes:
-      - ./fullnode-selic-1:.
-    environment:
-      P2P_PORT: 30305
-      BESU_IDENTITY: "fullnode-selic-1"
-    entrypoint: ["./entrypoint_bootnode.sh"]
-
-  fullnode-selic-2:
-    image: "hyperledger/besu:23.7.2"
-    volumes:
-      - ./fullnode-selic-2:.
-    environment:
-      P2P_PORT: 30306
-      BESU_IDENTITY: "fullnode-selic-2"
-    entrypoint: ["./entrypoint_bootnode.sh"]
-  
-############## FULL NODES ##############
-
-  fullnode-parta-1:
-    image: "hyperledger/besu:23.7.2"
-    volumes:
-      - ./fullnode-parta-1:.
-    environment:
-      P2P_PORT: 30307
-      BESU_IDENTITY: "fullnode-parta-1"
-      RPC_HTTP_PORT: 8546
-    entrypoint: ["./entrypoint_fullnode.sh"]
-
-  fullnode-partb-1:
-    image: "hyperledger/besu:23.7.2"
-    volumes:
-      - ./fullnode-partb-1:.
-    environment:
-      P2P_PORT: 30308
-      BESU_IDENTITY: "fullnode-partb-1"
-      RPC_HTTP_PORT: 8547
-    entrypoint: ["./entrypoint_fullnode.sh"]
-
-  fullnode-partc-1:
-    image: "hyperledger/besu:23.7.2"
-    volumes:
-      - ./fullnode-partc-1:.
-    environment:
-      P2P_PORT: 30309
-      BESU_IDENTITY: "fullnode-partc-1"
-      RPC_HTTP_PORT: 8548
-    entrypoint: ["./entrypoint_fullnode.sh"]
-
-  fullnode-partd-1:
-    image: "hyperledger/besu:23.7.2"
-    volumes:
-      - ./fullnode-partd-1:.
-    environment:
-      P2P_PORT: 30310
-      BESU_IDENTITY: "fullnode-partd-1"
-      RPC_HTTP_PORT: 8549
-    entrypoint: ["./entrypoint_fullnode.sh"]
-
-
 ########### VALIDATOR NODES ############
 
   validator-bcb-1:
     image: "hyperledger/besu:23.7.2"
     volumes:
-      - ./validator-bcb-1:.
+      - ./nodes/validator-bcb-1:/node
+      - ./entrypoint.sh:/entrypoint.sh
     environment:
-      P2P_PORT: 30311
+      VALIDATOR: 1
       BESU_IDENTITY: "validator-bcb-1"
-      RPC_HTTP_PORT: 8550
-    entrypoint: ["./entrypoint_fullnode.sh"]
+    entrypoint: ["/entrypoint.sh"]
+    networks:
+      bacen:
+        ipv4_address: 172.21.0.2
 
   validator-bcb-2:
     image: "hyperledger/besu:23.7.2"
     volumes:
-      - ./validator-bcb-2:.
+      - ./nodes/validator-bcb-2:/node
+      - ./entrypoint.sh:/entrypoint.sh
     environment:
-      P2P_PORT: 30312
+      VALIDATOR: 1
       BESU_IDENTITY: "validator-bcb-2"
-      RPC_HTTP_PORT: 8551
-    entrypoint: ["./entrypoint_fullnode.sh"]
-
-  validator-bcb-3:
-    image: "hyperledger/besu:23.7.2"
-    volumes:
-      - ./validator-bcb-3:.
-    environment:
-      P2P_PORT: 30313
-      BESU_IDENTITY: "validator-bcb-3"
-      RPC_HTTP_PORT: 8552
-    entrypoint: ["./entrypoint_fullnode.sh"]
-
-  validator-bcb-4:
-    image: "hyperledger/besu:23.7.2"
-    volumes:
-      - ./validator-bcb-4:.
-    environment:
-      P2P_PORT: 30314
-      BESU_IDENTITY: "validator-bcb-4"
-      RPC_HTTP_PORT: 8553
-    entrypoint: ["./entrypoint_fullnode.sh"]
+    entrypoint: ["/entrypoint.sh"]
+    networks:
+      bacen:
+        ipv4_address: 172.21.0.3
+    depends_on:
+      - validator-bcb-1
 
   validator-selic-1:
     image: "hyperledger/besu:23.7.2"
     volumes:
-      - ./validator-selic-1:.
+      - ./nodes/validator-selic-1:/node
+      - ./entrypoint.sh:/entrypoint.sh
     environment:
-      P2P_PORT: 30315
+      VALIDATOR: 1
       BESU_IDENTITY: "validator-selic-1"
-      RPC_HTTP_PORT: 8554
-    entrypoint: ["./entrypoint_fullnode.sh"]
+    entrypoint: ["/entrypoint.sh"]
+    networks:
+      bacen:
+        ipv4_address: 172.21.0.4
+    depends_on:
+      - validator-bcb-1
 
   validator-selic-2:
     image: "hyperledger/besu:23.7.2"
     volumes:
-      - ./validator-selic-2:.
+      - ./nodes/validator-selic-2:/node
+      - ./entrypoint.sh:/entrypoint.sh
     environment:
-      P2P_PORT: 30316
+      VALIDATOR: 1
       BESU_IDENTITY: "validator-selic-2"
-      RPC_HTTP_PORT: 8555
-    entrypoint: ["./entrypoint_fullnode.sh"]
+    entrypoint: ["/entrypoint.sh"]
+    networks:
+      bacen:
+        ipv4_address: 172.21.0.5
+    depends_on:
+      - validator-bcb-1
 
 ############### JD NODES ###############
 
   fullnode-jd-1:
     image: "hyperledger/besu:23.7.2"
     volumes:
-      - ./fullnode-jd-1:.
+      - ./nodes/fullnode-jd-1:/node
+      - ./entrypoint.sh:/entrypoint.sh
     environment:
-      P2P_PORT: 30317
+      VALIDATOR: 0
       BESU_IDENTITY: "fullnode-jd-1"
-      RPC_HTTP_PORT: 8556
-    entrypoint: ["./entrypoint_fullnode.sh"]
+    entrypoint: ["/entrypoint.sh"]
+    networks:
+      bacen:
+        ipv4_address: 172.21.0.6
+    depends_on:
+      - validator-bcb-1
 
   fullnode-jd-2:
     image: "hyperledger/besu:23.7.2"
     volumes:
-      - ./fullnode-jd-2:.
+      - ./nodes/fullnode-jd-2:/node
+      - ./entrypoint.sh:/entrypoint.sh
     environment:
-      P2P_PORT: 30318
+      VALIDATOR: 0
       BESU_IDENTITY: "fullnode-jd-2"
-      RPC_HTTP_PORT: 8557
-    entrypoint: ["./entrypoint_fullnode.sh"]
+    entrypoint: ["/entrypoint.sh"]
+    networks:
+      bacen:
+        ipv4_address: 172.21.0.7
+    depends_on:
+      - validator-bcb-1
 
 ########################################
+
+networks:
+  bacen:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
