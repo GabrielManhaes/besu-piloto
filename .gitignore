@@ -1,0 +1,9 @@
+nodes/*/data/caches
+nodes/*/data/database
+nodes/*/data/fastsync
+nodes/*/data/DATABASE_METADATA.json
+nodes/*/data/besu.networks
+nodes/*/data/besu.ports
+nodes/*/data/jwt.hex
+
+
