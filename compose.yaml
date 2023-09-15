@@ -1,101 +1,82 @@
-services:
-########### VALIDATOR NODES ############
+version: '3.6'
 
+x-validator:
+  &validator
+  restart: "on-failure"
+  image: hyperledger/besu:23.7.2
+  entrypoint:
+    - /bin/bash
+    - -c
+    - |
+      /opt/besu/bin/besu --config-file=/node/config.toml --genesis-file=/node/genesis.json --Xdns-enabled=true --p2p-host=$$(hostname -i) --rpc-http-api=ETH,WEB3,NET,QBFT,ADMIN --rpc-http-host=$$(hostname -i);
+
+
+x-archivenode:
+  &archivenode
+  restart: "on-failure"
+  image: hyperledger/besu:23.7.2
+  entrypoint:
+    - /bin/bash
+    - -c
+    - |
+      /opt/besu/bin/besu --config-file=/node/config.toml --genesis-file=/node/genesis.json --Xdns-enabled=true --graphql-http-host=$$(hostname -i) --rpc-ws-host=$$(hostname --i) --p2p-host=$$(hostname -i) --rpc-http-api=ETH,WEB3,NET,QBFT,ADMIN --rpc-http-host=$$(hostname -i);
+
+services:
   validator-bcb-1:
-    image: "hyperledger/besu:23.7.2"
+    << : *validator
     volumes:
       - ./nodes/validator-bcb-1:/node
-      - ./entrypoint.sh:/entrypoint.sh
     environment:
-      VALIDATOR: 1
       BESU_IDENTITY: "validator-bcb-1"
-    entrypoint: ["/entrypoint.sh"]
-    networks:
-      bacen:
-        ipv4_address: 172.21.0.2
 
   validator-bcb-2:
-    image: "hyperledger/besu:23.7.2"
+    << : *validator
     volumes:
       - ./nodes/validator-bcb-2:/node
-      - ./entrypoint.sh:/entrypoint.sh
     environment:
-      VALIDATOR: 1
       BESU_IDENTITY: "validator-bcb-2"
-    entrypoint: ["/entrypoint.sh"]
-    networks:
-      bacen:
-        ipv4_address: 172.21.0.3
     depends_on:
       - validator-bcb-1
 
   validator-selic-1:
-    image: "hyperledger/besu:23.7.2"
+    << : *validator
     volumes:
       - ./nodes/validator-selic-1:/node
-      - ./entrypoint.sh:/entrypoint.sh
     environment:
-      VALIDATOR: 1
       BESU_IDENTITY: "validator-selic-1"
-    entrypoint: ["/entrypoint.sh"]
-    networks:
-      bacen:
-        ipv4_address: 172.21.0.4
     depends_on:
       - validator-bcb-1
 
   validator-selic-2:
-    image: "hyperledger/besu:23.7.2"
+    << : *validator
     volumes:
       - ./nodes/validator-selic-2:/node
-      - ./entrypoint.sh:/entrypoint.sh
     environment:
-      VALIDATOR: 1
       BESU_IDENTITY: "validator-selic-2"
-    entrypoint: ["/entrypoint.sh"]
-    networks:
-      bacen:
-        ipv4_address: 172.21.0.5
     depends_on:
       - validator-bcb-1
 
-############### JD NODES ###############
-
-  fullnode-jd-1:
-    image: "hyperledger/besu:23.7.2"
+  archivenode-jd-1:
+    << : *archivenode
+    ports:
+      - "8545:8545"
+      - "8546:8546"
+      - "8547:8547"
     volumes:
-      - ./nodes/fullnode-jd-1:/node
-      - ./entrypoint.sh:/entrypoint.sh
+      - ./nodes/archivenode-jd-1:/node
     environment:
-      VALIDATOR: 0
-      BESU_IDENTITY: "fullnode-jd-1"
-    entrypoint: ["/entrypoint.sh"]
-    networks:
-      bacen:
-        ipv4_address: 172.21.0.6
+      BESU_IDENTITY: "archivenode-jd-1"
     depends_on:
       - validator-bcb-1
 
-  fullnode-jd-2:
-    image: "hyperledger/besu:23.7.2"
+  archivenode-jd-2:
+    << : *archivenode
+    # ports:
+    #   - "8545:8545"
+    #   - "8546:8546"
     volumes:
-      - ./nodes/fullnode-jd-2:/node
-      - ./entrypoint.sh:/entrypoint.sh
+      - ./nodes/archivenode-jd-2:/node
     environment:
-      VALIDATOR: 0
-      BESU_IDENTITY: "fullnode-jd-2"
-    entrypoint: ["/entrypoint.sh"]
-    networks:
-      bacen:
-        ipv4_address: 172.21.0.7
+      BESU_IDENTITY: "archivenode-jd-2"
     depends_on:
       - validator-bcb-1
-
-########################################
-
-networks:
-  bacen:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.21.0.0/16

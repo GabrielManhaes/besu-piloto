@@ -1,0 +1,15 @@
+bootnodes=["enode://af3a4e4497ab7b751b7b94f3de6ae97a4e51213fb86b1b541f67876a493e9e2eee8a20cf460b806af11f58325919aa1284791d23dca06f99e668ad9ca1da65de@validator-bcb-1:30303","enode://dd8df83247e94663ee3570a8a86689fa3501b2e3fdf3855a54502b3f1a5f8558de223863ccecf4ac4bb5467a9ec22a60d9b3f5d15c39e77b60bdd33295a9220a@validator-bcb-2:30303","enode://eebaa862804af1ea44ae0434aae95308068d5802953612cee4793e2be1f992bc94d90dbf6a391c44f0a5386d3196cc6d79408eebe93e200fe937a76ad0b62829@validator-selic-1:30303","enode://8a9fd372d1dfdda4b8cf8db0b04acb03721e16e7bdba80ea376cde8fc74679a7c43b77e6626bb2117a319113924c3bf2f2508a3243008eb11b41e1e8a635b397@validator-selic-2:30303"]
+data-path="/node/data"
+logging="INFO"
+host-allowlist=["*"]
+rpc-http-enabled=true
+rpc-http-port=8545
+rpc-http-cors-origins=["*"]
+rpc-ws-enabled=true
+rpc-ws-port=8546
+graphql-http-enabled=true
+graphql-http-port=8547
+nat-method="NONE"
+sync-mode="FULL"
+p2p-port=30303
+discovery-enabled=true
